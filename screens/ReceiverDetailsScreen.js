@@ -11,7 +11,7 @@ export default class ReceiverDetailsScreen extends Component{
     this.state={
       userId          : firebase.auth().currentUser.email,
       userName          :'',
-      receiverId      : this.props.navigation.getParam('details')["username"],
+      receiverId      : this.props.navigation.getParam('details')["email_id"],
       exchangeId       : this.props.navigation.getParam('details')["exchangeId"],
       itemName        : this.props.navigation.getParam('details')["item_name"],
       description  : this.props.navigation.getParam('details')["description"],
@@ -37,7 +37,7 @@ export default class ReceiverDetailsScreen extends Component{
 
 getreceiverDetails(){
   console.log("receiver ",this.state.receiverId);
-  db.collection('users').where('username','==',this.state.receiverId).get()
+  db.collection('users').where('email_id','==',this.state.receiverId).get()
   .then(snapshot=>{
     snapshot.forEach(doc=>{
       this.setState({

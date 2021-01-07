@@ -3,6 +3,7 @@ import {View,Text, KeyboardAvoidingView,TextInput,StyleSheet,ScrollView,Touchabl
 import MyHeader from '../components/MyHeader'
 import db from '../config'
 import firebase from 'firebase'
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default class SettingScreen extends Component{
   constructor(){
@@ -21,17 +22,17 @@ export default class SettingScreen extends Component{
   var user = firebase.auth().currentUser;
   var email= user.email
 
- db.collection('users').where('username','==',email).get()
+ db.collection('users').where('email_id','==',email).get()
   .then(snapshot => {
     snapshot.forEach(doc => {
        var data = doc.data()
        this.setState({
-         emailId: data.username,
+         emailId  :data.email_id,
          firstName:data.first_name,
-         lastName:data.last_name,
-         address:data.address,
-         contact:data.mobile_number,
-         docId:doc.id
+         lastName :data.last_name,
+         address  :data.address,
+         contact  :data.mobile_number,
+         docId    :doc.id
        })
     });
   })
@@ -119,7 +120,7 @@ componentDidMount(){
                 />
                 <TouchableOpacity style={styles.button}
                   onPress={()=>{this.updateData()}}>
-                  <Text> Save </Text>
+                  <Text style={{fontSize:RFValue(20), fontWeight:"bold"}}> Save </Text>
                 </TouchableOpacity>
                 </View>
 

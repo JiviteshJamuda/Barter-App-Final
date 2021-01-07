@@ -9,7 +9,7 @@ export default class Exchange extends Component {
   constructor(){
     super()
     this.state = {
-      userName : firebase.auth().currentUser.email,
+      emailID : firebase.auth().currentUser.email,
       itemName : "",
       description : "",
       requestedItemName:"",
@@ -28,11 +28,11 @@ export default class Exchange extends Component {
 
   addItem= async(itemName, description)=>{
 
-    var userName = this.state.userName
+    var emailID = this.state.emailID
     var exchangeId = this.createUniqueId()
     console.log("im called",exchangeId);
     db.collection("exchange_requests").add({
-      "username"    : userName,
+      "email_id"    : emailID,
       "item_name"   : itemName,
       "description" : description,
       "exchangeId"  : exchangeId,
@@ -43,7 +43,7 @@ export default class Exchange extends Component {
      })
 
      await this.getExchangeRequest()
-     db.collection('users').where("username","==",userName).get()
+     db.collection('users').where("email_id","==",emailID).get()
    .then()
    .then((snapshot)=>{
      snapshot.forEach((doc)=>{
@@ -83,7 +83,7 @@ export default class Exchange extends Component {
 
   getIsExchangeRequestActive(){
     db.collection('users')
-    .where('username','==',this.state.userName)
+    .where('email_id','==',this.state.emailID)
     .onSnapshot(querySnapshot => {
       querySnapshot.forEach(doc => {
         this.setState({
@@ -98,7 +98,7 @@ export default class Exchange extends Component {
   getExchangeRequest =()=>{
     // getting the requested item
   var exchangeRequest=  db.collection('exchange_requests')
-    .where('username','==',this.state.userName)
+    .where('email_id','==',this.state.emailID)
     .get()
     .then((snapshot)=>{
       snapshot.forEach((doc)=>{
@@ -116,7 +116,7 @@ export default class Exchange extends Component {
 }
 
 getData(){
-  fetch("http://data.fixer.io/api/latest?access_key=1f7dd48123a05ae588283b5e13fae944&format=1")
+  fetch("http://data.fixer.io/api/latest?access_key=ab6871e655c3bc8090126f9fca4ad99e&format=1")
   .then(response=>{
     return response.json();
   }).then(responseData =>{
@@ -138,14 +138,13 @@ getData(){
 
 
   receivedItem=(itemName)=>{
-    var userId = this.state.userName
+    var userId = this.state.emailID
     var exchangeId = this.state.exchangeId
     db.collection('received_items').add({
         "user_id": userId,
         "item_name":itemName,
         "exchange_id"  : exchangeId,
         "itemStatus"  : "received",
-
     })
   }
 
@@ -157,7 +156,7 @@ getData(){
     })
 
     //getting the  doc id to update the users doc
-    db.collection('users').where('username','==',this.state.userName).get()
+    db.collection('users').where('email_id','==',this.state.emailID).get()
     .then((snapshot)=>{
       snapshot.forEach((doc) => {
         //updating the doc
@@ -170,7 +169,7 @@ getData(){
 }
   sendNotification=()=>{
     //to get the first name and last name
-    db.collection('users').where('username','==',this.state.userName).get()
+    db.collection('users').where('email_id','==',this.state.emailID).get()
     .then((snapshot)=>{
       snapshot.forEach((doc)=>{
         var name = doc.data().first_name
@@ -237,7 +236,7 @@ getData(){
           <TextInput
             style={styles.formTextInput}
             placeholder ={"Item Name"}
-            maxLength ={8}
+            maxLength ={50}
             onChangeText={(text)=>{
               this.setState({
                 itemName: text

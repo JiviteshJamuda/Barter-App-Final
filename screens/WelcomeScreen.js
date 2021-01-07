@@ -10,7 +10,7 @@ export default class WelcomeScreen extends Component {
   constructor(){
     super()
     this.state={
-      username : '',
+      emailID : '',
       password: '',
       isVisible : false,
       firstName : "",
@@ -22,8 +22,8 @@ export default class WelcomeScreen extends Component {
     }
   }
 
-  userLogin = (username, password)=>{
-    firebase.auth().signInWithEmailAndPassword(username, password)
+  userLogin = (emailID, password)=>{
+    firebase.auth().signInWithEmailAndPassword(emailID, password)
     .then(()=>{
       this.props.navigation.navigate('HomeScreen')
     })
@@ -34,18 +34,18 @@ export default class WelcomeScreen extends Component {
     })
   }
 
-  userSignUp = (username, password,confirmPassword) =>{
+  userSignUp = (emailID, password,confirmPassword) =>{
     if(password !== confirmPassword){
         return Alert.alert("password doesn't match\nCheck your password.")
     }else{
-      firebase.auth().createUserWithEmailAndPassword(username, password)
+      firebase.auth().createUserWithEmailAndPassword(emailID, password)
       .then((response)=>{
         db.collection('users').add({
-          first_name:this.state.firstName,
-          last_name:this.state.lastName,
+          first_name   :this.state.firstName,
+          last_name    :this.state.lastName,
           mobile_number:this.state.mobileNumber,
-          username:this.state.username,
-          address:this.state.address,
+          email_id     :this.state.emailID,
+          address      :this.state.address,
           currency_code:this.state.currencyCode
         })
         return  Alert.alert(
@@ -121,11 +121,11 @@ export default class WelcomeScreen extends Component {
           />
           <TextInput
             style={styles.formTextInput}
-            placeholder ={"Username"}
+            placeholder ={"Email ID"}
             keyboardType ={'email-address'}
             onChangeText={(text)=>{
               this.setState({
-                username: text
+                emailID: text
               })
             }}
           /><TextInput
@@ -162,7 +162,7 @@ export default class WelcomeScreen extends Component {
             <TouchableOpacity
               style={styles.registerButton}
               onPress={()=>
-                this.userSignUp(this.state.username, this.state.password, this.state.confirmPassword)
+                this.userSignUp(this.state.emailID, this.state.password, this.state.confirmPassword)
               }
             >
             <Text style={styles.registerButtonText}>Register</Text>
@@ -174,7 +174,7 @@ export default class WelcomeScreen extends Component {
             >
             <Text style={{  fontSize : RFValue(20),
                 fontWeight:'bold',
-                color: "#32867d",
+                color: "red",
                 marginTop:RFValue(10)
                 }}>
                   Cancel
@@ -202,14 +202,14 @@ export default class WelcomeScreen extends Component {
           <Text style={{color:'#32867d'}}> A Trading Method </Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Text style={{color:'#32867d', fontSize:18, fontWeight:'bold',marginLeft:55}}>USERNAME</Text>
+          <Text style={{color:'#32867d', fontSize:18, fontWeight:'bold',marginLeft:55}}>Email ID</Text>
           <View style={{alignItems:'center'}}>
             <TextInput
             style={styles.loginBox}
             keyboardType ={'email-address'}
             onChangeText={(text)=>{
               this.setState({
-                username: text
+                emailID: text
               })
             }}
             />
@@ -229,7 +229,7 @@ export default class WelcomeScreen extends Component {
           <View style={{alignItems:'center'}}>
             <TouchableOpacity
               style={[styles.button,{marginBottom:10}]}
-              onPress = {()=>{this.userLogin(this.state.username, this.state.password)}}
+              onPress = {()=>{this.userLogin(this.state.emailID, this.state.password)}}
               >
               <Text style={{color:'#32867d', fontSize:18, fontWeight:'bold'}}>LOGIN</Text>
             </TouchableOpacity>
@@ -307,7 +307,8 @@ const styles = StyleSheet.create({
       borderColor:"grey",
       paddingBottom:RFValue(10),
       marginLeft:RFValue(20),
-      marginBottom:RFValue(14)
+      marginBottom:RFValue(14),
+      borderRadius:10,
   },
   registerButton: {
     width: "85%",
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: RFValue(3),
-    backgroundColor: "#32867d",
+    backgroundColor: "green",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -333,10 +334,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   cancelButton:{
-    width:200,
+    width:80,
     height:30,
     justifyContent:'center',
     alignItems:'center',
-    marginTop:5,
+    marginTop:15,
   },
 })

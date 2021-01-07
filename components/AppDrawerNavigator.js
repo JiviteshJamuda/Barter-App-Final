@@ -29,8 +29,8 @@ export const AppDrawerNavigator = createDrawerNavigator({
     Setting : {
       screen : SettingScreen,
       navigationOptions:{
-        drawerIcon : <Icon name="gift" type ="font-awesome" />,
-        drawerLabel : "My Received Books"
+        drawerIcon : <Icon name="gear" type ="font-awesome" />,
+        drawerLabel : "Settings"
       }
     }
 },
